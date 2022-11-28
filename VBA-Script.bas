@@ -13,6 +13,18 @@ Sub Collect_Ticker():
     Dim end_i As Integer
     end_i = Cells(Rows.Count, 1).End(xlUp).Row
     
+    ' init year start open
+    Dim yr_start_open As Double
+    yr_start_open = Cells(2, 3).Value
+    
+    ' Yearly Change
+    Dim yr_change As Double
+    
+    ' Yearly Percentage Change
+    Dim yr_percent_change As Double
+    
+    ' #############################################################################################
+    
     ' Titles for summary Table + inserting new column
     Range("i1").EntireColumn.Insert
     Range("i1").Value = "Ticker"
@@ -29,13 +41,10 @@ Sub Collect_Ticker():
     ' Change width of summary columns
     Columns("J:M").ColumnWidth = 20
     
-    ' init year start open
-    Dim yr_start_open As Double
-    yr_start_open = Cells(2, 3).Value
+    ' Change the format of column k to be in percentages
+    Columns("k").NumberFormat = "0.00%"
     
-    ' Yearly Change
-    Dim yr_change As Double
-    
+    ' #############################################################################################
     
     stock_volume = 0
     ' Iterate through the rows in a single worksheet
@@ -51,7 +60,6 @@ Sub Collect_Ticker():
             yr_change = Cells(i, 6).Value - yr_start_open
             yr_change_index = Cells(Rows.Count, 10).End(xlUp).Row + 1
             Cells(yr_change_index, 10).Value = yr_change
-            yr_start_open = Cells(i + 1, 3).Value
             
             ' Format the yearly change outcomes
             If yr_change < 0 Then
@@ -59,10 +67,17 @@ Sub Collect_Ticker():
             Else
                 Cells(yr_change_index, 10).Interior.ColorIndex = 4
             End If
-                
+            
+            ' Percentage change from the opening price at the beginning of a given year to end
+            yr_percent_change = Cells(i, 6).Value / yr_start_open
+            yr_percent_change_index = Cells(Rows.Count, 11).End(xlUp).Row + 1
+            Cells(yr_percent_change_index, 11).Value = yr_percent_change - 1
+                            
             ' Adding the volume stock to the summary table alongside its unique ticker
             stock_volume_summary_index = Cells(Rows.Count, 12).End(xlUp).Row + 1
             Cells(stock_volume_summary_index, 12).Value = stock_volume
+            
+            yr_start_open = Cells(i + 1, 3).Value
             stock_volume = 0
         End If
     Next i
