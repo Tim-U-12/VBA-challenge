@@ -18,10 +18,10 @@ Sub Stock_Analysis():
         WorksheetName = ws.Name
         
         ' loop index
-        Dim i As Integer
+        Dim i As Long
         
         ' end index
-        Dim end_i As Integer
+        Dim end_i As Long
         end_i = ws.Cells(Rows.Count, 1).End(xlUp).Row
         
         ' init year start open
